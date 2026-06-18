@@ -3,8 +3,8 @@ const cors = require("cors");
 require("dotenv").config();
 require("./config/db");
 const app = express();
-const trainerRoutes = require("./routes/trainerRoutes");
-const membershipPlanRoutes = require("./routes/membershipPlanRoutes");
+const trainerRoutes = require("./routes/trainerroutes");
+const membershipPlanRoutes = require("./routes/membershipplanroutes");
 // Middleware
 app.use(cors());
 app.use(express.json());
