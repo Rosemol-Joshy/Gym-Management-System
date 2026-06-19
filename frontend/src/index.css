@@ -1,5 +1,32 @@
 /* Iron Matte Theme - Professional Gym Management System */
 
+:root {
+  /* Colors */
+  --bg-primary: #18181B;      /* Dark Zinc (60%) */
+  --bg-secondary: #27272A;    /* Medium Zinc (30%) */
+  --bg-tertiary: #1F1F23;     /* Lighter background for inputs */
+  --accent: #E11D48;         /* Crimson Pulse (10%) */
+  --accent-hover: #BE123C;
+  --accent-glow: rgba(225, 29, 72, 0.15);
+  
+  --border: #3F3F46;          /* Zinc 700 */
+  --border-hover: #52525B;    /* Zinc 600 */
+  
+  --text-primary: #F4F4F5;    /* Soft Chalk */
+  --text-secondary: #A1A1AA;  /* Zinc 400 */
+  --text-muted: #71717A;      /* Zinc 500 */
+  
+  --status-active-bg: rgba(225, 29, 72, 0.1);
+  --status-active-border: rgba(225, 29, 72, 0.25);
+  --status-inactive-bg: rgba(255, 255, 255, 0.03);
+  --status-inactive-border: #3F3F46;
+  
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -10,13 +37,13 @@ html,
 body,
 #root {
   height: 100%;
-  background-color: #18181B;
+  background-color: var(--bg-primary);
 }
 
 body {
-  background-color: #18181B;
-  color: #F4F4F5;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
   line-height: 1.6;
   font-weight: 400;
 }
@@ -25,25 +52,25 @@ body {
 h1 {
   font-size: 32px;
   font-weight: 700;
-  color: #F4F4F5;
-  margin-bottom: 24px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
   letter-spacing: -0.5px;
 }
 
 h2 {
   font-size: 28px;
   font-weight: 700;
-  color: #F4F4F5;
+  color: var(--text-primary);
   margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 2px solid #E11D48;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
   display: inline-block;
 }
 
 h3 {
   font-size: 20px;
   font-weight: 600;
-  color: #F4F4F5;
+  color: var(--text-primary);
   margin-bottom: 18px;
 }
 
@@ -57,18 +84,18 @@ h3 {
 
 /* Cards */
 .card {
-  background: #27272A;
-  border: 1px solid #3F3F46;
-  border-radius: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   padding: 28px;
   margin-bottom: 28px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover {
-  border-color: #E11D48;
-  box-shadow: 0 4px 16px rgba(225, 29, 72, 0.15);
+  border-color: var(--accent);
+  box-shadow: 0 4px 20px rgba(225, 29, 72, 0.12);
 }
 
 /* Forms */
@@ -76,30 +103,30 @@ input,
 select,
 textarea {
   width: 100%;
-  padding: 14px 16px;
-  background: #18181B;
-  color: #F4F4F5;
-  border: 1px solid #3F3F46;
-  border-radius: 8px;
+  padding: 12px 16px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   margin-bottom: 16px;
   font-size: 15px;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   font-family: inherit;
 }
 
 input::placeholder,
 select::placeholder,
 textarea::placeholder {
-  color: #71717a;
+  color: var(--text-muted);
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: #E11D48;
+  border-color: var(--accent);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.1);
-  background-color: #1f1f23;
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background-color: var(--bg-tertiary);
 }
 
 select {
@@ -113,24 +140,27 @@ select {
 
 /* Buttons */
 button {
-  background: #E11D48;
+  background: var(--accent);
   color: white;
   border: none;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   margin-right: 12px;
   margin-bottom: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 button:hover {
-  background: #BE123C;
+  background: var(--accent-hover);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(225, 29, 72, 0.3);
 }
@@ -140,7 +170,7 @@ button:active {
 }
 
 button:disabled {
-  background: #3F3F46;
+  background: var(--border);
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -153,42 +183,45 @@ button:disabled {
 }
 
 .delete-btn {
-  background: #71717a;
+  background: var(--border);
+  border: 1px solid var(--border-hover);
 }
 
 .delete-btn:hover {
   background: #52525b;
+  box-shadow: none;
 }
 
 /* Tables */
 table {
   width: 100%;
   border-collapse: collapse;
-  background: #27272A;
-  border-radius: 12px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 thead {
-  background: linear-gradient(135deg, #E11D48 0%, #BE123C 100%);
+  background: var(--bg-tertiary);
+  border-bottom: 2px solid var(--accent);
 }
 
 th {
-  color: white;
+  color: var(--text-primary);
   padding: 16px 18px;
   text-align: left;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 td {
   padding: 16px 18px;
-  border-bottom: 1px solid #3F3F46;
-  color: #F4F4F5;
-  font-size: 15px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 14px;
 }
 
 tbody tr {
@@ -196,8 +229,7 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background: #323238;
-  box-shadow: inset 0 0 0 1px #3F3F46;
+  background: rgba(255, 255, 255, 0.015);
 }
 
 tbody tr:last-child td {
@@ -208,20 +240,26 @@ tbody tr:last-child td {
 label {
   display: block;
   margin-bottom: 8px;
-  color: #A1A1AA;
-  font-size: 14px;
-  font-weight: 500;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
 }
 
-/* Form Groups */
-form {
-  display: block;
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
 }
-
-form > * {
-  margin-bottom: 16px;
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
 }
 
 /* Responsive Design */

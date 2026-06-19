@@ -6,6 +6,10 @@ function Membership() {
   const [plans, setPlans] = useState([]);
   const [editingId, setEditingId] = useState(null);
 
+  // Search & Filter state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All"); // 'All', 'Active', 'Inactive'
+
   const [form, setForm] = useState({
     plan_name: "",
     price: "",
@@ -32,6 +36,7 @@ function Membership() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadPlans();
   }, []);
 
@@ -46,11 +51,11 @@ function Membership() {
   const handleEdit = (plan) => {
     setEditingId(plan.plan_id);
     setEditForm({
-      plan_name: plan.plan_name,
-      price: plan.price.toString(),
-      duration_months: plan.duration_months.toString(),
-      description: plan.description,
-      status: plan.status
+      plan_name: plan.plan_name || "",
+      price: plan.price ? plan.price.toString() : "",
+      duration_months: plan.duration_months ? plan.duration_months.toString() : "",
+      description: plan.description || "",
+      status: plan.status || ""
     });
   };
 
@@ -103,9 +108,35 @@ function Membership() {
       console.error("Failed to add membership plan", error);
     }
   };
+
+  // KPI Calculations
+  const totalCount = plans.length;
+  const activeCount = plans.filter(p => p.status === "Active").length;
+
+  const avgMonthly = plans.length > 0
+    ? (plans.reduce((sum, p) => sum + ((p.price || 0) / (p.duration_months || 1)), 0) / plans.length).toFixed(0)
+    : "0";
+
+  const highestPrice = plans.length > 0
+    ? Math.max(...plans.map(p => p.price || 0))
+    : 0;
+
+  // Filtered List
+  const filteredPlans = plans.filter(p => {
+    const queryMatch =
+      p.plan_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    const statusMatch =
+      statusFilter === "All" ||
+      p.status === statusFilter;
+    return queryMatch && statusMatch;
+  });
+
   return (
     <div className="page-wrapper">
       <div className="page-container">
+
+        {/* Page Header */}
         <div className="page-header">
           <div>
             <h1 className="page-title"> Membership Plans</h1>
@@ -113,9 +144,80 @@ function Membership() {
           </div>
         </div>
 
+        {/* Dynamic Metric Cards */}
+        <div className="metrics-row">
+          <div className="metric-card">
+            <span className="metric-icon"></span>
+            <div className="metric-info">
+              <span className="metric-value">{totalCount}</span>
+              <span className="metric-label">Total Plans</span>
+            </div>
+          </div>
+          <div className="metric-card">
+            <span className="metric-icon active-icon">✓</span>
+            <div className="metric-info">
+              <span className="metric-value">{activeCount}</span>
+              <span className="metric-label">Active Packages</span>
+            </div>
+          </div>
+          <div className="metric-card">
+            <span className="metric-icon spec-icon">₹</span>
+            <div className="metric-info">
+              <span className="metric-value">₹{parseInt(avgMonthly).toLocaleString()}</span>
+              <span className="metric-label">Avg. Monthly Fee</span>
+            </div>
+          </div>
+          <div className="metric-card">
+            <span className="metric-icon exp-icon">👑</span>
+            <div className="metric-info">
+              <span className="metric-value">₹{highestPrice.toLocaleString()}</span>
+              <span className="metric-label">Highest Rate</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Page Control Bar */}
+        <div className="page-controls">
+          <div className="search-box">
+            <svg className="search-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              className="search-control-input"
+              placeholder="Search plans by name or details..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <div className="filter-pills">
+            <button
+              className={`pill-btn ${statusFilter === "All" ? "active" : ""}`}
+              onClick={() => setStatusFilter("All")}
+            >
+              All
+            </button>
+            <button
+              className={`pill-btn ${statusFilter === "Active" ? "active" : ""}`}
+              onClick={() => setStatusFilter("Active")}
+            >
+              Active
+            </button>
+            <button
+              className={`pill-btn ${statusFilter === "Inactive" ? "active" : ""}`}
+              onClick={() => setStatusFilter("Inactive")}
+            >
+              Inactive
+            </button>
+          </div>
+        </div>
+
+        {/* Forms Row */}
         <div className="content-grid">
           {editingId && (
-            <div className="form-card">
+            <div className="form-card animate-slide-up">
               <h3 className="form-card-title">Edit Membership Plan</h3>
               <form onSubmit={handleUpdatePlan}>
                 <div className="form-group full">
@@ -171,6 +273,7 @@ function Membership() {
                     name="status"
                     value={editForm.status}
                     onChange={handleEditChange}
+                    required
                   >
                     <option value="">Select Status</option>
                     <option value="Active">Active</option>
@@ -250,6 +353,7 @@ function Membership() {
                   name="status"
                   value={form.status}
                   onChange={handleChange}
+                  required
                 >
                   <option value="">Select Status</option>
                   <option value="Active">Active</option>
@@ -266,69 +370,61 @@ function Membership() {
           </div>
         </div>
 
-        <div className="table-card">
-          <div className="table-card-header">
-            <h3 className="table-card-title">All Membership Plans</h3>
+        {/* Membership Plans Grid */}
+        <h2 style={{ display: 'block', marginBottom: '20px', borderBottom: '2px solid var(--accent)' }}>All Membership Plans</h2>
+
+        {filteredPlans.length === 0 ? (
+          <div className="card empty-state">
+            <div className="empty-state-icon"></div>
+            <p className="empty-state-text">No membership plans found matching filter criteria.</p>
           </div>
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Plan Name</th>
-                <th>Price</th>
-                <th>Duration</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {plans.length === 0 ? (
-                <tr>
-                  <td colSpan="7">
-                    <div className="empty-state">
-                      <div className="empty-state-icon"></div>
-                      <p className="empty-state-text">No membership plans yet. Create your first plan to get started!</p>
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                plans.map((p) => (
-                  <tr key={p.plan_id}>
-                    <td>#{p.plan_id}</td>
-                    <td>
-                      <strong>{p.plan_name}</strong>
-                    </td>
-                    <td>₹{p.price.toLocaleString()}</td>
-                    <td>{p.duration_months} Months</td>
-                    <td>{p.description}</td>
-                    <td>
-                      <span className={`status-badge status-${p.status?.toLowerCase() || "inactive"}`}>
-                        {p.status || "N/A"}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="action-buttons">
-                        <button
-                          className="button-sm button-sm-primary"
-                          onClick={() => handleEdit(p)}
-                        >
-                          ✎ Edit
-                        </button>
-                        <button
-                          className="button-sm button-sm-danger"
-                          onClick={() => handleDeletePlan(p.plan_id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        ) : (
+          <div className="cards-grid animate-slide-up">
+            {filteredPlans.map((p) => {
+              const monthlyPrice = p.duration_months > 0
+                ? Math.round(p.price / p.duration_months)
+                : p.price;
+              return (
+                <div key={p.plan_id} className="plan-card">
+                  <div className="plan-card-header">
+                    <h3 className="plan-card-title">{p.plan_name}</h3>
+                    <span className={`status-badge status-${p.status?.toLowerCase() || "inactive"}`}>
+                      {p.status || "N/A"}
+                    </span>
+                  </div>
+
+                  <div className="plan-price-tag">
+                    <span className="plan-price-amount">₹{p.price.toLocaleString()}</span>
+                    <span className="plan-price-duration">/ {p.duration_months} Months</span>
+                  </div>
+
+                  <p className="plan-description">{p.description || "Access premium strength gym equipment and amenities."}</p>
+
+                  <ul className="plan-card-features">
+                    <li className="plan-card-feature-item">Approx. ₹{monthlyPrice.toLocaleString()} / month</li>
+                    <li className="plan-card-feature-item">Full gym facilities access</li>
+                    <li className="plan-card-feature-item">Locker & shower services</li>
+                  </ul>
+
+                  <div className="card-actions-row">
+                    <button
+                      className="button-sm button-sm-primary"
+                      onClick={() => handleEdit(p)}
+                    >
+                      ✎ Edit
+                    </button>
+                    <button
+                      className="button-sm button-sm-danger"
+                      onClick={() => handleDeletePlan(p.plan_id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
