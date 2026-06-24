@@ -332,6 +332,9 @@ function Trainer() {
                     </svg>
                     Update Profile
                   </button>
+                 
+                 
+                 
                   <button
                     type="button"
                     onClick={() => setEditingId(null)}

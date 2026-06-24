@@ -8,7 +8,7 @@
 }
 
 .navbar {
-  background: linear-gradient(180deg, #1d1d21 0%, #18181B 100%);
+  background: linear-gradient(180deg, #181818 0%, #18181B 100%);
   border-bottom: 2px solid var(--accent);
   padding: 0;
   position: sticky;
