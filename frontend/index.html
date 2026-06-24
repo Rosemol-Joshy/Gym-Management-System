@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Strength - Premium Access Control</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Sandbox Mock Warning Banner (Dynamic) -->
+    <div class="sandbox-banner" id="sandbox-banner" style="display: none;">
+        <span>💡 MySQL Connection Offline: Running in local sandbox mode (data resets on restart).</span>
+    </div>
+
+    <!-- 1. AUTHENTICATION MODULE -->
+    <div class="auth-wrapper" id="auth-wrapper">
+        
+        <!-- LOGIN CARD -->
+        <div class="auth-card active" id="login-card">
+            <div class="auth-header">
+                <svg class="logo-icon" viewBox="0 0 24 24" width="48" height="48">
+                    <path d="M6.5 10.5C6.22386 10.5 6 10.7239 6 11V13C6 13.2761 6.22386 13.5 6.5 13.5H7.5V17.5C7.5 17.7761 7.72386 18 8 18H9C9.27614 18 9.5 17.7761 9.5 17.5V13.5H14.5V17.5C14.5 17.7761 14.7239 18 15 18H16C16.2761 18 16.5 17.7761 16.5 17.5V13.5H17.5C17.7761 13.5 18 13.2761 18 13V11C18 10.7239 17.7761 10.5 17.5 10.5H16.5V6.5C16.5 6.22386 16.2761 6 16 6H15C14.7239 6 14.5 6.22386 14.5 6.5V10.5H9.5V6.5C9.5 6.22386 9.27614 6 9 6H8C7.72386 6 7.5 6.22386 7.5 6.5V10.5H6.5Z" fill="currentColor"/>
+                    <path d="M3 11C2.44772 11 2 11.4477 2 12C2 12.5523 2.44772 13 3 13V11ZM21 11V13C21.5523 13 22 12.5523 22 12C22 11.4477 21.5523 11 21 11Z" fill="currentColor"/>
+                    <rect x="1" y="11" width="1" height="2" rx="0.5" fill="currentColor"/>
+                    <rect x="22" y="11" width="1" height="2" rx="0.5" fill="currentColor"/>
+                </svg>
+                <h2>APEX STRENGTH</h2>
+                <p>IRON ACCESS PORTAL</p>
+            </div>
+            
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="login-username">Username or Email</label>
+                    <input type="text" id="login-username" class="form-input" placeholder="e.g. admin or member" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-accent btn-block">
+                    <span>Sign In</span>
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <span>New athlete? <a href="#" id="link-to-register">Register here</a></span>
+            </div>
+
+            <div class="auth-helper">
+                <span>Quick Access: 
+                    <button type="button" id="quick-login-admin" style="background: var(--accent-crimson-alpha); color: var(--accent-crimson); border: 1.5px solid rgba(225, 29, 72, 0.25); font-weight: 700; margin: 0 4px; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; text-transform: uppercase; transition: var(--transition-fast);">Admin</button>
+                    <button type="button" id="quick-login-member" style="background: rgba(255, 255, 255, 0.04); color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 700; margin: 0 4px; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; text-transform: uppercase; transition: var(--transition-fast);">Member</button>
+                </span>
+            </div>
+        </div>
+
+        <!-- REGISTRATION CARD -->
+        <div class="auth-card" id="register-card">
+            <div class="auth-header">
+                <svg class="logo-icon" viewBox="0 0 24 24" width="48" height="48">
+                    <path d="M6.5 10.5C6.22386 10.5 6 10.7239 6 11V13C6 13.2761 6.22386 13.5 6.5 13.5H7.5V17.5C7.5 17.7761 7.72386 18 8 18H9C9.27614 18 9.5 17.7761 9.5 17.5V13.5H14.5V17.5C14.5 17.7761 14.7239 18 15 18H16C16.2761 18 16.5 17.7761 16.5 17.5V13.5H17.5C17.7761 13.5 18 13.2761 18 13V11C18 10.7239 17.7761 10.5 17.5 10.5H16.5V6.5C16.5 6.22386 16.2761 6 16 6H15C14.7239 6 14.5 6.22386 14.5 6.5V10.5H9.5V6.5C9.5 6.22386 9.27614 6 9 6H8C7.72386 6 7.5 6.22386 7.5 6.5V10.5H6.5Z" fill="currentColor"/>
+                    <path d="M3 11C2.44772 11 2 11.4477 2 12C2 12.5523 2.44772 13 3 13V11ZM21 11V13C21.5523 13 22 12.5523 22 12C22 11.4477 21.5523 11 21 11Z" fill="currentColor"/>
+                    <rect x="1" y="11" width="1" height="2" rx="0.5" fill="currentColor"/>
+                    <rect x="22" y="11" width="1" height="2" rx="0.5" fill="currentColor"/>
+                </svg>
+                <h2>JOIN APEX STRENGTH</h2>
+                <p>CREATE YOUR ATHLETE ACCOUNT</p>
+            </div>
+            
+            <form id="form-register">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reg-username">Username</label>
+                        <input type="text" id="reg-username" class="form-input" placeholder="e.g. jdoe" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-fullname">Full Name</label>
+                        <input type="text" id="reg-fullname" class="form-input" placeholder="John Doe" required autocomplete="name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email Address</label>
+                    <input type="email" id="reg-email" class="form-input" placeholder="e.g. john@doe.com" required autocomplete="email">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" class="form-input" placeholder="••••••••" required autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-role">Access Role</label>
+                        <select id="reg-role" class="form-input" required>
+                            <option value="Member">Gym Member</option>
+                            <option value="Staff">Trainer / Staff</option>
+                            <option value="Facility Manager">Facility Manager</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-accent btn-block">
+                    <span>Create Account</span>
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <span>Already registered? <a href="#" id="link-to-login">Sign in here</a></span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 2. PROTECTED MEMBER HOME/DASHBOARD MODULE -->
+    <div class="dashboard-wrapper" id="dashboard-wrapper" style="display: none;">
+        <div class="dashboard-container">
+            <header class="dashboard-header">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" width="28" height="28">
+                        <path d="M6.5 10.5C6.22386 10.5 6 10.7239 6 11V13C6 13.2761 6.22386 13.5 6.5 13.5H7.5V17.5C7.5 17.7761 7.72386 18 8 18H9C9.27614 18 9.5 17.7761 9.5 17.5V13.5H14.5V17.5C14.5 17.7761 14.7239 18 15 18H16C16.2761 18 16.5 17.7761 16.5 17.5V13.5H17.5C17.7761 13.5 18 13.2761 18 13V11C18 10.7239 17.7761 10.5 17.5 10.5H16.5V6.5C16.5 6.22386 16.2761 6 16 6H15C14.7239 6 14.5 6.22386 14.5 6.5V10.5H9.5V6.5C9.5 6.22386 9.27614 6 9 6H8C7.72386 6 7.5 6.22386 7.5 6.5V10.5H6.5Z" fill="currentColor"/>
+                        <path d="M3 11C2.44772 11 2 11.4477 2 12C2 12.5523 2.44772 13 3 13V11ZM21 11V13C21.5523 13 22 12.5523 22 12C22 11.4477 21.5523 11 21 11Z" fill="currentColor"/>
+                        <rect x="1" y="11" width="1" height="2" rx="0.5" fill="currentColor"/>
+                        <rect x="22" y="11" width="1" height="2" rx="0.5" fill="currentColor"/>
+                    </svg>
+                    <span>APEX STRENGTH</span>
+                </div>
+                <div class="user-pill">
+                    <div class="user-avatar" id="nav-avatar">U</div>
+                    <span id="nav-fullname">Athlete Profile</span>
+                </div>
+            </header>
+
+            <main class="dashboard-content">
+                <div class="welcome-section">
+                    <h1>Welcome Back, <span class="text-accent" id="dashboard-user-title">Athlete</span></h1>
+                    <p>Access Granted • Premium Strength Facilities</p>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Profile Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Profile Details</h2>
+                        </div>
+                        <div class="card-content flex-column">
+                            <div class="profile-info-row">
+                                <span class="info-label">Full Name</span>
+                                <span class="info-value" id="profile-fullname">Franco Columbu</span>
+                            </div>
+                            <div class="profile-info-row">
+                                <span class="info-label">Username</span>
+                                <span class="info-value" id="profile-username">member</span>
+                            </div>
+                            <div class="profile-info-row">
+                                <span class="info-label">Email Address</span>
+                                <span class="info-value" id="profile-email">member@apexstrength.com</span>
+                            </div>
+                            <div class="profile-info-row">
+                                <span class="info-label">Access Clearance</span>
+                                <span class="badge badge-accent" id="profile-role">Member</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Gate Verification Console</h2>
+                        </div>
+                        <div class="card-content flex-column">
+                            <p class="text-muted">Simulate access check-in verification for gym turnstile gates.</p>
+                            <button class="btn btn-accent btn-block" id="btn-simulate-checkin">
+                                <span>Verify Check-In Gate Access</span>
+                            </button>
+                            <div class="gate-status" id="gate-status">
+                                Turnstile status: <strong>SECURED (Ready)</strong>
+                            </div>
+                            <button class="btn btn-secondary btn-block" id="btn-logout-dashboard" style="margin-top: 10px;">
+                                <span>Log Out Access Session</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Notification Toast Wrapper -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
