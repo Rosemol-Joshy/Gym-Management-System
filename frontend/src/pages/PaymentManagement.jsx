@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./pages.css";
 import { currentRole } from "../utils/role";
+import {
+  getPayments,
+  addPayment,
+  deletePayment,
+} from "../services/paymentService";
 
 function PaymentManagement() {
   if (currentRole !== "admin") {
@@ -23,6 +28,19 @@ function PaymentManagement() {
     status: "Pending",
   });
 
+  const loadPayments = async () => {
+    try {
+      const res = await getPayments();
+      setPayments(Array.isArray(res.data) ? res.data : []);
+    } catch (error) {
+      console.error("Failed to load payments", error);
+    }
+  };
+
+  useEffect(() => {
+    loadPayments();
+  }, []);
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -30,35 +48,47 @@ function PaymentManagement() {
     });
   };
 
-  const handleDelete = (id) => {
-    setPayments(payments.filter((payment) => payment.payment_id !== id));
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this payment?")) {
+      try {
+        await deletePayment(id);
+        loadPayments();
+      } catch (error) {
+        console.error("Failed to delete payment", error);
+      }
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setPayments([
-      ...payments,
-      {
-        payment_id: payments.length + 1,
-        ...form,
-      },
-    ]);
+    try {
+      await addPayment(form);
 
-    setForm({
-      member_name: "",
-      amount: "",
-      payment_date: "",
-      due_date: "",
-      status: "Pending",
-    });
+      setForm({
+        member_name: "",
+        amount: "",
+        payment_date: "",
+        due_date: "",
+        status: "Pending",
+      });
+
+      loadPayments();
+    } catch (error) {
+      console.error("Failed to add payment", error);
+    }
   };
 
   return (
     <div className="page-wrapper">
       <div className="page-container">
         <div className="page-header">
-          <h1 className="page-title">Payment Management</h1>
+          <div>
+            <h1 className="page-title">Payment Management</h1>
+            <p className="page-subtitle">
+              Manage member payments and due dates
+            </p>
+          </div>
         </div>
 
         <div className="form-card">
@@ -114,6 +144,7 @@ function PaymentManagement() {
 
             <div className="form-group full">
               <label className="form-label">Status</label>
+
               <select
                 name="status"
                 value={form.status}
@@ -132,7 +163,9 @@ function PaymentManagement() {
         </div>
 
         <div className="table-card">
-          <h3 className="table-card-title">Payment Records</h3>
+          <div className="table-card-header">
+            <h3 className="table-card-title">Payment Records</h3>
+          </div>
 
           <table className="data-table">
             <thead>
@@ -152,6 +185,7 @@ function PaymentManagement() {
                 <tr>
                   <td colSpan="7">
                     <div className="empty-state">
+                      <div className="empty-state-icon">💳</div>
                       <p className="empty-state-text">
                         No payment records found.
                       </p>
